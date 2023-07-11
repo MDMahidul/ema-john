@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { addToDb, getShoppingCart,deleteShoppingCart } from '../../utilities/fakedb';
 import './Shop.css';
+import { Link } from 'react-router-dom';
 import Product from '../Product/Product';
 import Cart from '../Cart/Cart';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const Shop= () => {
     const [products,setProducts]=useState([]);
@@ -57,20 +60,27 @@ const Shop= () => {
 
 
     return (
-        <div className='shop-container'>
-            <div className="products-container">
-               {
-                products.map(product=>
-                <Product key={product.id} product={product} handleAddToCart={handleAddToCart}>
-
-                </Product>)
-               }
-                
-            </div>
-            <div className="card-container">
-               <Cart handleClearCart={handleClearCart} cart={cart}></Cart>
-            </div>
+      <div className="shop-container">
+        <div className="products-container">
+          {products.map((product) => (
+            <Product
+              key={product.id}
+              product={product}
+              handleAddToCart={handleAddToCart}
+            ></Product>
+          ))}
         </div>
+        <div className="card-container">
+          <Cart handleClearCart={handleClearCart} cart={cart}>
+            <Link className="proceed-link" to="/orders">
+              <button className="btn-proceed">
+                Review Order
+                <FontAwesomeIcon icon={faArrowRight} />
+              </button>
+            </Link>
+          </Cart>
+        </div>
+      </div>
     );
 };
 
