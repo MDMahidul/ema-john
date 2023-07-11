@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useContext,useState } from 'react';
 import './Login.css'
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../providers/AuthProvider';
 
 const Login = () => {
+    const {signIn} = useContext(AuthContext);
+    const [error, setError] = useState("");
+
+    const handleLogin=event=>{
+        event.preventDefault();
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email, password);
+        setError("");
+        
+        signIn(email,password)
+            .then(result=>{
+                const loggedUser=result.user;
+                console.log(loggedUser);
+                form.reset();
+            })
+            .catch(error=>{
+                console.log(error)
+                setError(error.message);
+                form.reset();
+            })
+    }
+
     return (
       <div className="form-container">
         <h2 className="form-title">Login</h2>
-        <form action="">
+        <form action="" onSubmit={handleLogin}>
           <div className="form-control">
             <label htmlFor="">Email</label>
             <input type="email" name="email" id="" required />
@@ -23,6 +48,7 @@ const Login = () => {
             Create New Account
           </Link>
         </p>
+        <p className="text-error">{error}</p>
       </div>
     );
 };
